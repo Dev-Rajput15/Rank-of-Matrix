@@ -1,0 +1,180 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int a;
+    printf("Enter the no. of rows ");
+    scanf("%d", &a);
+    int b;
+    printf("Enter the no. of columns ");
+    scanf("%d", &b);
+    int matrix[a][b];
+    if((a<1||b<1)||(a>4||b>4))
+    {
+        printf("Enter the row or/and column > 0 and < 5");
+        return 0;
+    }
+    for(int i=0; i<a; i++)
+    {
+        for(int j=0; j<b; j++)
+        {
+            printf("Enter the element a%d%d ", i+1, j+1);
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+    int rank;
+    if(a==4&&b==4)
+    {
+        rank= four_four(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==3&&b==4)
+    {
+        rank= three_three(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==2&&b==4)
+    {
+        rank= two_two(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==3&&b==3)
+    {
+        rank= three_three(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==4&&b==3)
+    {
+        rank= three_three(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==2&&b==3)
+    {
+        rank= two_two(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==4&&b==2)
+    {
+        rank= two_two(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==3&&b==2)
+    {
+        rank= two_two(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==2&&b==2)
+    {
+        rank= two_two(a, b, matrix);
+        printf("Rank of matrix: %d", rank);
+    }
+    else if(a==1||b==1)
+    {
+        printf("Rank of matrix: 1");
+    }
+    return 0;
+}
+int four_four(int a, int b, int matrix[][b])
+{
+    int c[4];
+    int j= 1;
+    int k= 2;
+    int l= 3;
+    for(int i=0; i<4; i++)
+    {
+        if(i==1)
+        {
+            j--;
+        }
+        else if(i==2)
+        {
+            k--;
+        }
+        else if(i==3)
+        {
+            l--;
+        }
+        c[i]= (matrix[0][i])*((matrix[1][j])*((matrix[2][k]*matrix[3][l])-(matrix[3][k]*matrix[2][l]))
+                               -(matrix[1][k])*((matrix[2][j]*matrix[3][l])-(matrix[3][j]*matrix[2][l]))
+                               +(matrix[1][l])*((matrix[2][j]*matrix[3][k])-(matrix[3][j]*matrix[2][k])));
+    }
+    int det= (c[0])- (c[1])+ (c[2])- (c[3]);
+    if(det==0)
+    {
+        printf("Value of 4*4 determinant: %d\n", det);
+        int rank= three_three(a, b, matrix);
+        return rank;
+    }
+    else
+    {
+        printf("Value of 4*4 determinant: %d\n", det);
+        return 4;
+    }
+}
+int three_three(int a, int b, int matrix[][b])
+{
+    int det;
+    for(int i=0; i<a-2; i++)
+    {
+        for(int j=0; j<b-2; j++)
+        {
+            for(int k=j+1; k<b-1; k++)
+            {
+                for(int l=k+1; l<b; l++)
+                {
+                    for(int m=i+1; m<a-1; m++)
+                    {
+                        for(int n=m+1; n<a; n++)
+                        {
+                            det= (matrix[i][j])*((matrix[m][k]*matrix[n][l])-(matrix[n][k]*matrix[m][l]))
+                                  -(matrix[i][k])*((matrix[m][j]*matrix[n][l])-(matrix[n][j]*matrix[m][l]))
+                                  +(matrix[i][l])*((matrix[m][j]*matrix[n][k])-(matrix[n][j]*matrix[m][k]));
+                            if(det!=0)
+                            {
+                                printf("Value of non-zero (first) 3*3 determinant: %d\n", det);
+                                goto end;
+                            }
+                            printf("Value of 3*3 determinant: %d\n", det);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(det==0)
+    {
+        int rank= two_two(a, b, matrix);
+        return rank;
+    }
+    end:
+        return 3;
+}
+int two_two(int a, int b, int matrix[][b])
+{
+    int det;
+    for(int i=0; i<a-1; i++)
+    {
+        for(int j=0; j<b-1; j++)
+        {
+            for(int k=j+1; k<b; k++)
+            {
+                for(int l=i+1; l<a; l++)
+                {
+                    det= (matrix[i][j]*matrix[l][k])-(matrix[l][j]*matrix[i][k]);
+                    if(det!=0)
+                    {
+                        printf("Value of non-zero (first) 2*2 determinant: %d\n", det);
+                        goto end;
+                    }
+                    printf("Value of 2*2 determinant: %d\n", det);
+                }
+            }
+        }
+    }
+    if(det==0)
+    {
+        return 1;
+    }
+    end:
+        return 2;
+}
